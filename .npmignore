@@ -1,0 +1,11 @@
+node_modules/
+src/
+.vscode/
+.devcontainer/
+http/
+jest.config.js
+rollup.config.js
+tsconfig.json
+eslint.config.mjs
+
+

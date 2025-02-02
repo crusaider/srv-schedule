@@ -1,0 +1,7 @@
+###
+# Suggestions
+GET https://www.srvatervinning.se/rest-api/core/sewagePickup/getSuggestions?query=Rudsj%C3%B6terrassen+2 HTTP/1.1
+
+###
+# Search
+GET https://www.srvatervinning.se/rest-api/core/sewagePickup/search?query=Rudsj%C3%B6terrassen+2&city= HTTP/1.1
