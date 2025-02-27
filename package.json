@@ -1,5 +1,5 @@
 {
-  "name": "@crusaider/srv-sechedule",
+  "name": "@crusaider/srv-schedule",
   "version": "1.0.0",
   "description": "Get fetching schedule for SRV from https://www.srvatervinning.se/avfallshamtning/nar-hamtar-vi-ditt-avfall",
   "author": "Jonas Andreasson",
