@@ -1,5 +1,5 @@
 # CLAUDE.md
 
-Se [AGENTS.md](./AGENTS.md) för projektöversikt, teknik-stack, struktur,
-kommandon och konventioner. Riktlinjerna där gäller för allt arbete i detta
-repo.
+See [AGENTS.md](./AGENTS.md) for the project overview, tech stack, structure,
+commands and conventions. The guidelines there apply to all work in this
+repository.

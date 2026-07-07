@@ -1,83 +1,84 @@
 # AGENTS.md
 
-Vägledning för AI-agenter (och nya utvecklare) som arbetar i detta repo.
+Guidance for AI agents (and new contributors) working in this repository.
 
-## Vad projektet är
+## What this project is
 
-`@crusaider/srv-schedule` är ett litet TypeScript-bibliotek som wrappar SRV
-Återvinnings inofficiella REST-API för sophämtningsschema
-(`https://www.srvatervinning.se/rest-api/core/sewagePickup`). Biblioteket
-publiceras till npm och exponerar två funktioner:
+`@crusaider/srv-schedule` is a small TypeScript library that wraps SRV
+Återvinning's unofficial REST API for waste collection schedules
+(`https://www.srvatervinning.se/rest-api/core/sewagePickup`). The library is
+published to npm and exposes two functions:
 
-- `findSuggestions(query)` – slår upp adressförslag/kunddetaljer för en adress.
-- `search(query)` – hämtar sophämtningsschemat för en adress.
+- `findSuggestions(query)` – looks up address suggestions / customer details
+  for an address.
+- `search(query)` – fetches the waste collection schedule for an address.
 
-Detta är ett hobbyprojekt. API:et är inte officiellt och kan sluta fungera när
-som helst.
+This is a hobby project. The API is unofficial and may break at any time.
 
-## Teknik-stack
+## Tech stack
 
-- **Språk:** TypeScript (`strict: true`), target/module `ESNext`.
-- **Enda runtime-beroende:** `cross-fetch` (isomorf `fetch`).
-- **Bygg:** Rollup → `dist/bundle.cjs.js` (CommonJS), `dist/bundle.esm.js`
-  (ESM) och `dist/index.d.ts` (typer).
+- **Language:** TypeScript (`strict: true`), target/module `ESNext`.
+- **Only runtime dependency:** `cross-fetch` (isomorphic `fetch`).
+- **Build:** Rollup → `dist/bundle.cjs.js` (CommonJS), `dist/bundle.esm.js`
+  (ESM) and `dist/index.d.ts` (types).
 - **Test:** Jest + ts-jest.
 - **Lint/format:** ESLint (flat config, type-checked) + Prettier.
-- **Git hooks:** Husky + lint-staged (pre-commit kör `npm test` och
+- **Git hooks:** Husky + lint-staged (pre-commit runs `npm test` and
   `lint-staged`).
 
-## Projektstruktur
+## Project structure
 
 ```
 src/
-  index.ts              Publikt API – re-exporterar findSuggestions och search
-  findSuggestions.ts    findSuggestions()
-  search.ts             search()
-  sendAPIRequest.ts     Delad HTTP-hjälpare (bygger URL, kastar vid !ok)
-  conactPaths.ts        concatPaths() – slår ihop path-segment (obs: filnamnet
-                        är felstavat, funktionen heter concatPaths)
-  SearchResponse.ts     Typer för search-svaret
-  SuggestionsResponse.ts Typer för suggestions-svaret
-  *.test.ts             Enhetstester (körs med `npm test`)
+  index.ts               Public API – re-exports findSuggestions and search
+  findSuggestions.ts     findSuggestions()
+  search.ts              search()
+  sendAPIRequest.ts      Shared HTTP helper (builds URL, throws on !ok)
+  conactPaths.ts         concatPaths() – joins path segments (note: the file
+                         name is misspelled; the function is concatPaths)
+  SearchResponse.ts      Types for the search response
+  SuggestionsResponse.ts Types for the suggestions response
+  *.test.ts              Unit tests (run with `npm test`)
 tests/
-  integration.test.ts   Integrationstest mot det riktiga API:et (`npm run test:integration`)
+  integration.test.ts    Integration tests against the real API (`npm run test:integration`)
 http/
-  srv-sewagePickup.http Manuella API-anrop (VS Code REST Client)
+  srv-sewagePickup.http  Manual API calls (VS Code REST Client)
 ```
 
-## Kommandon
+## Commands
 
-| Kommando | Beskrivning |
+| Command | Description |
 | --- | --- |
-| `npm test` | Enhetstester (`jest ./src`) – inga nätverksanrop, `cross-fetch` mockas. |
-| `npm run test:integration` | Integrationstester (`jest ./tests`) – anropar det **riktiga** API:et, kräver nätverk. |
-| `npm run build` | Rensar `dist/` och bygger med Rollup. |
-| `npm run lint` | ESLint på `./src` och `./tests`. |
-| `npm run format` | Prettier `--write` på hela repot. |
+| `npm test` | Unit tests (`jest ./src`) – no network calls, `cross-fetch` is mocked. |
+| `npm run test:integration` | Integration tests (`jest ./tests`) – call the **real** API, require network access. |
+| `npm run build` | Cleans `dist/` and builds with Rollup. |
+| `npm run lint` | ESLint on `./src` and `./tests`. |
+| `npm run format` | Prettier `--write` across the whole repo. |
 
-## Konventioner
+## Conventions
 
-- **TypeScript strict.** Håll typerna exakta. Svarstyper är `readonly` –
-  behåll det.
-- **Nya API-anrop** ska gå genom `sendAPIReqest` i `sendAPIRequest.ts`, inte
-  anropa `fetch` direkt.
-- **Enhetstester ligger bredvid källan** (`src/*.test.ts`) och får inte göra
-  riktiga nätverksanrop – mocka `cross-fetch` (se `sendAPIRequest.test.ts` som
-  mönster). Långsamma/nätverksberoende tester hör hemma i `tests/`.
-- **Formatering sköts av Prettier**, linting av ESLint. Kör `npm run format`
-  och `npm run lint` innan commit. Pre-commit-hooken kör dessutom `npm test`.
-- **Ändra inte publikt API** (`findSuggestions`, `search`, exporterade typer)
-  utan att uppdatera `README.md` och överväga en versionshöjning.
-- Det finns kända stavfel i identifierare (`sendAPIReqest`, filen
-  `conactPaths.ts`). Rätta dem inte enskilt – de ingår i publik/intern yta och
-  en ändring bör vara medveten och samlad.
+- **TypeScript strict.** Keep types precise. Response types are `readonly` –
+  keep them that way.
+- **New API calls** should go through `sendAPIReqest` in `sendAPIRequest.ts`,
+  not call `fetch` directly.
+- **Unit tests live next to the source** (`src/*.test.ts`) and must not make
+  real network calls – mock `cross-fetch` (see `sendAPIRequest.test.ts` as a
+  pattern). Slow/network-dependent tests belong in `tests/`.
+- **Formatting is handled by Prettier**, linting by ESLint. Run `npm run
+  format` and `npm run lint` before committing. The pre-commit hook also runs
+  `npm test`.
+- **Do not change the public API** (`findSuggestions`, `search`, exported
+  types) without updating `README.md` and considering a version bump.
+- There are known typos in identifiers (`sendAPIReqest`, the file
+  `conactPaths.ts`). Do not fix them in isolation – they are part of the
+  public/internal surface and any change should be deliberate and batched.
 
-## Att verifiera innan commit
+## Verify before committing
 
 1. `npm run lint`
 2. `npm test`
-3. `npm run build` (vid ändringar som kan påverka bygget)
+3. `npm run build` (for changes that may affect the build)
 
-Integrationstesterna kräver internet och kan fela av skäl utanför din kod
-(API:et nere/ändrat). Kör dem vid behov, men lita inte blint på dem i CI utan
-nät.
+The integration tests require internet and may fail for reasons outside your
+code (API down/changed). Run them when relevant, but do not rely on them
+blindly in CI without network access.
